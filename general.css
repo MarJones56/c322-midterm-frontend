@@ -20,4 +20,23 @@ body {
     margin: 10px;
   }
 
+  .makeQuiz {
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .bank {
+    border: 1px solid darkorange;
+    padding: 16px 16px;
+    flex: 2;
+  }
+
+  .newQuiz {
+    flex: 1;
+    border: 1px solid orange;
+    margin-left: 100px;  
+    justify-content: center;
+    text-align: center;
+  }
+
  

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link rel="stylesheet" href="navbar.css">
+    <link rel="stylesheet" href="general.css">
+  </head>
+
+  <body>
+    <ul class="topnav">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="add-question.html">Add questions</a></li>
+      <li><a href="make-a-quiz.html">Create a quiz</a></li>
+      <li><a class="active" href="take-a-quiz.html">Take a quiz</a></li>
+      <li class="right"><a href="#about">About</a></li>
+    </ul>
+
+    <h1 id="title"></h1>
+    <br />
+    <h1 id="results"></h1>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const correct = urlParams.get('correct');
+        const total = urlParams.get('total');
+        const title = urlParams.get('title');
+
+        let hTitle = document.getElementById("title");
+        hTitle.innerText = "You completed the quiz" + title;
+        let results = document.getElementById("results");
+        results.innerText = "You scored " + correct + " out of " + total;
+    </script>
+   
+  </body>
+</html>

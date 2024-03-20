@@ -3,11 +3,14 @@
     height: 24.7vw;
     margin-left: 30vw;
     margin-right: 30vw;
+
 }
 
 .controls {
     display: flex;
     justify-content: space-between;
+    align-items: center;
+    height: 100%; 
 }
 
 .hide {

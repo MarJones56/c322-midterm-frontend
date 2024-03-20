@@ -4,8 +4,119 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
+  <link rel="stylesheet" href="general.css">
+  <link rel="stylesheet" href="cards.css">
+  <link rel="stylesheet" href="quiz.css">
 </head>
 <body>
+
+  <div id = "screen" class="screen"></div>
+
+  <script>
+
+    let isCorrect = [];
+    const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    let quiz = null;
+    let questions = [];
+    displayTheQuiz();
+    let currentQuestion = 0;
+
+    async function getQuiz(){
+      let host = "http://localhost:8080";
+      let response = await fetch(host + "/quizzes/" + id);
+      let result = await response.json();
+      return result;
+    }
+
+    async function displayTheQuiz(){
+      quiz = await getQuiz();
+      questions = quiz.questions;
+
+      let screen = document.getElementById("screen");
+      screen.innerHTML = "";
+
+      let div = document.createElement("div");  
+          div.className = "card";
+          let innerHtml = `
+         
+        <img src="http://localhost:8080/questions/${questions[currentQuestion].id}/image" alt="question" style="width:100%">
+        <div class="container">
+          <h4><b>${questions[currentQuestion].id}</b></h4> 
+          <p>${questions[currentQuestion].description}</p>
+          <form id="quizForm">
+              <input type="radio" id="q${questions[currentQuestion].id}ptionA" name="q${questions[currentQuestion].id}Answer" value="${questions[currentQuestion].choices[0]}">
+              <label for="q${questions[currentQuestion].id}ptionA">${questions[currentQuestion].choices[0]}</label><br>
+
+              <input type="radio" id="q${questions[currentQuestion].id}ptionB" name="q${questions[currentQuestion].id}Answer" value="${questions[currentQuestion].choices[1]}">
+              <label for="q${questions[currentQuestion].id}ptionB">${questions[currentQuestion].choices[1]}</label><br>
+
+              <input type="radio" id="q${questions[currentQuestion].id}ptionC" name="q${questions[currentQuestion].id}Answer" value="${questions[currentQuestion].choices[2]}">
+              <label for="q${questions[currentQuestion].id}ptionC">${questions[currentQuestion].choices[2]}</label><br>       
+          </form> 
+        </div>
+            `;
+          div.innerHTML = innerHtml;
+          screen.appendChild(div);
+
+          let controls = document.createElement("div");
+          controls.className = controls;
+          let hide = ``;
+          if (currentQuestion == 0){
+            hide = ` class="hide"/>`
+          } else {
+            hide = `/>`
+          }
+
+          let controlInner = `<input type="button" value="Previous" onclick="previous()"` + hide + `
+                              <span>(Question ${currentQuestion+1} out of ${questions.length})</span>
+                              <input type="button" value="Next" onclick="next()"/>`;
+          controls.innerHTML = controlInner;
+          screen.appendChild(controls);
+
+
+    }
+
+    function next(){
+      const selectedOption = document.querySelector(`input[name="q${questions[currentQuestion].id}Answer"]:checked`);
+
+      if (selectedOption){
+        const selectedValue = selectedOption.value;
+
+        if (selectedValue == questions[currentQuestion].answer){
+          isCorrect[currentQuestion] = true
+        } else {
+          isCorrect[currentQuestion] = false;
+        }
+      }
+
+      currentQuestion++;
+      if (currentQuestion == questions.length){
+        submit();
+        return;
+      }
+
+      displayTheQuiz();
+    }
+
+    function previous(){
+      currentQuestion--;
+      displayTheQuiz();
+    }
+
+    function submit(){
+      let correct = 0;
+      for (let i = 0; i < isCorrect.length; i++){
+        if (isCorrect[i]){
+          correct++;
+        }
+      }
+
+      let url = "result.html?correct=" + correct + "&total=" + isCorrect.length + "&title=" + quiz.title;
+      window.location.href = url;
+    }
+
+  </script>
   
 </body>
 </html>

@@ -23,7 +23,7 @@
     let currentQuestion = 0;
 
     async function getQuiz(){
-      let host = "http://localhost:8080";
+      let host = https://midterm-latest.onrender.com;
       let response = await fetch(host + "/quizzes/" + id);
       let result = await response.json();
       return result;
